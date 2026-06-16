@@ -1,0 +1,16 @@
+{
+  "sources": [
+    "huarenjie",
+    "xineurope"
+  ],
+  "selected_stations": [
+    "Arcueil-Cachan",
+    "Laplace"
+  ],
+  "include_extra": "",
+  "exclude_extra": "",
+  "whole_only": true,
+  "max_rent": 1000,
+  "months": 3,
+  "max_pages": 10
+}

@@ -1,0 +1,11 @@
+# 本地数据库含已保存的 Gmail 应用专用密码——绝不要上传到 GitHub
+huarenjie_rentals.sqlite3
+huarenjie_rentals*.sqlite3
+
+# 运行产物 / 缓存
+__pycache__/
+*.pyc
+server.log
+
+# 本地一次性导出的样本（可选忽略）
+huarenjie_rentals_test.*

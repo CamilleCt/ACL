@@ -1,0 +1,38 @@
+name: rental-monitor
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # 每 15 分钟（UTC；GitHub 高峰期可能略有延迟）
+  workflow_dispatch:          # 也可在 Actions 页手动点「Run workflow」
+
+permissions:
+  contents: write             # 允许把 state.json 提交回仓库
+
+concurrency:
+  group: rental-monitor
+  cancel-in-progress: false   # 不打断正在跑的扫描
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 扫描并按需发邮件
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_APP_PASSWORD: ${{ secrets.SMTP_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: python scan_ci.py
+
+      - name: 保存状态（已通知过的房源）
+        run: |
+          git config user.name "rental-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state.json
+          git commit -m "update state [skip ci]" || echo "无变化，跳过提交"
+          git push || echo "无需推送"
